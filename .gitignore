@@ -167,3 +167,9 @@ src/images/approved/*
 !src/images/approved/.gitkeep
 src/logs/*
 !src/logs/.gitkeep
+
+# Vercel specific
+.vercel/
+.vercel_build_output/
+.vercel_deployments/
+.vercel_cache/
