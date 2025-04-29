@@ -1,9 +1,12 @@
 import logging
+import os
 import sys
 from pathlib import Path
+
 from pythonjsonlogger import jsonlogger
+
 from src.utils.path_manager import PathManager
-import os
+
 
 class CustomJsonFormatter(jsonlogger.JsonFormatter):
     """Custom JSON formatter for logging."""

@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
+
 from src.config.constants import DirectoryConfig
+
 
 class PathManager:
     """Manages all project paths and ensures directory structure"""
