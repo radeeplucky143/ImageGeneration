@@ -160,10 +160,10 @@ $RECYCLE.BIN/
 
 # Project specific
 src/images/ingest/*
-src/images/process/*
-src/images/approved/*
 !src/images/ingest/.gitkeep
+src/images/process/*
 !src/images/process/.gitkeep
+src/images/approved/*
 !src/images/approved/.gitkeep
 src/logs/*
 !src/logs/.gitkeep
