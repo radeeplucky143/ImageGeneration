@@ -1,9 +1,11 @@
 import sys
+
 sys.dont_write_bytecode = True
-from fastapi import FastAPI
 from dotenv import load_dotenv
-from src.routes.api_routes import router
+from fastapi import FastAPI
+
 from src.config.constants import APIConfig
+from src.routes.api_routes import router
 
 # Load environment variables
 load_dotenv()
