@@ -1,13 +1,10 @@
 from fastapi import APIRouter, HTTPException
-from src.models.prompt_models import (
-    TopicRequest,
-    PromptResponse,
-    ImageRequest,
-    ImageResponse,
-    ApprovalRequest
-)
-from src.services.prompt_service import PromptService
+
+from src.models.prompt_models import (ApprovalRequest, ImageRequest,
+                                      ImageResponse, PromptResponse,
+                                      TopicRequest)
 from src.services.image_service import ImageService
+from src.services.prompt_service import PromptService
 
 router = APIRouter()
 prompt_service = PromptService()
