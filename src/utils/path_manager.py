@@ -44,3 +44,7 @@ class PathManager:
     @property
     def prompts_file(self) -> str:
         return DirectoryConfig.PROMPTS_FILE
+
+    @property
+    def log_dir(self) -> str:
+        return os.path.join(self.src_dir, DirectoryConfig.LOGS)

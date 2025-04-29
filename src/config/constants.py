@@ -5,7 +5,9 @@ load_dotenv()
 
 class DirectoryConfig:
     """Directory Configuration"""
-    SRC = 'src'
+    # Use /tmp as the base directory for Vercel compatibility
+    BASE = '/tmp'
+    SRC = os.path.join(BASE, 'src')
     CONFIG = 'config'
     UTILS = 'utils'
     LOGS = 'logs'

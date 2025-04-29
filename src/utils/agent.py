@@ -8,8 +8,9 @@ from PIL import Image
 from semantic_kernel import Kernel
 from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion, AzureTextEmbedding
 from semantic_kernel.memory import VolatileMemoryStore
-from openai import AzureOpenAI, AsyncAzureOpenAI
-from openai.types import ImagesResponse
+from openai import AzureOpenAI  # Use new OpenAI client
+# from openai import AzureOpenAI, AsyncAzureOpenAI  # REMOVE THIS
+# from openai.types import ImagesResponse  # REMOVE THIS
 
 from src.config.constants import AzureConfig, ImageConfig
 from src.utils.logger import logger
@@ -31,7 +32,7 @@ class AzureOpenAIChat:
         self.api_key = AzureConfig.API_KEY
         self.endpoint = AzureConfig.ENDPOINT
         self.deployment = AzureConfig.GTP4_DEPLOYMENT
-        self.api_version = AzureConfig.API_VERSION
+        self.api_version = "2023-12-01-preview"  # Use latest API version for DALL-E 3
         self.embedding_deployment = AzureConfig.EMBEDDING_DEPLOYMENT
         self.dall_e_deployment = AzureConfig.DALL_E_DEPLOYMENT
         
@@ -41,9 +42,16 @@ class AzureOpenAIChat:
         
         self.kernel = self._initialize_kernel()
         self.memory = VolatileMemoryStore()
-        self.client = self._initialize_openai_client()
-        self.async_client = self._initialize_async_client()
+        self.client = self._initialize_client()
         
+    def _initialize_client(self) -> AzureOpenAI:
+        """Initialize the Azure OpenAI client"""
+        return AzureOpenAI(
+            api_key=self.api_key,
+            api_version=self.api_version,
+            azure_endpoint=self.endpoint
+        )
+
     def _validate_config(self) -> None:
         """Validate the configuration settings."""
         required_vars = [
@@ -58,7 +66,6 @@ class AzureOpenAIChat:
     def _initialize_kernel(self) -> Kernel:
         """Initialize the Semantic Kernel with Azure services."""
         kernel = Kernel()
-        
         kernel.add_service(
             AzureChatCompletion(
                 deployment_name=self.deployment,
@@ -67,7 +74,6 @@ class AzureOpenAIChat:
                 api_version=self.api_version
             )
         )
-        
         kernel.add_service(
             AzureTextEmbedding(
                 deployment_name=self.embedding_deployment,
@@ -76,24 +82,7 @@ class AzureOpenAIChat:
                 api_version=self.api_version
             )
         )
-        
         return kernel
-
-    def _initialize_openai_client(self) -> AzureOpenAI:
-        """Initialize the Azure OpenAI client."""
-        return AzureOpenAI(
-            api_key=self.api_key,
-            api_version=self.api_version,
-            azure_endpoint=self.endpoint
-        )
-    
-    def _initialize_async_client(self) -> AsyncAzureOpenAI:
-        """Initialize the Async Azure OpenAI client."""
-        return AsyncAzureOpenAI(
-            api_key=self.api_key,
-            api_version=self.api_version,
-            azure_endpoint=self.endpoint
-        )
 
     async def _download_image(self, url: str, save_path: Union[str, Path]) -> None:
         """
@@ -152,21 +141,20 @@ class AzureOpenAIChat:
             
             for attempt in range(self.max_retries):
                 try:
-                    response: ImagesResponse = await self.async_client.images.generate(
+                    response = self.client.images.generate(
                         model=self.dall_e_deployment,
                         prompt=prompt,
+                        n=1,
                         size=ImageConfig.IMAGE_SIZE,
                         quality=ImageConfig.IMAGE_QUALITY,
-                        style=ImageConfig.IMAGE_STYLE,
-                        n=1,
-                        timeout=self.timeout
+                        style=ImageConfig.IMAGE_STYLE
                     )
                     break
                 except Exception as e:
                     if attempt == self.max_retries - 1:
                         raise
                     logger.warning(f"Attempt {attempt + 1} failed: {str(e)}")
-                    await asyncio.sleep(2 ** attempt)  # Exponential backoff
+                    await asyncio.sleep(2 ** attempt)
             
             if not response.data:
                 raise ValueError("No image data received from API")
@@ -179,7 +167,7 @@ class AzureOpenAIChat:
             if save_path is None:
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 filename = f"image_{timestamp}.png"
-                save_path = os.path.join(self.path_manager.ingest_dir, filename)
+                save_path = os.path.join(self.path_manager.image_ingest_dir, filename)
             
             # Download and validate the image
             await self._download_image(image_url, save_path)
@@ -222,7 +210,7 @@ class AzureOpenAIChat:
             
             for attempt in range(self.max_retries):
                 try:
-                    response = await self.async_client.chat.completions.create(
+                    response = openai.ChatCompletion.create(
                         model=self.deployment,
                         messages=[
                             {"role": "system", "content": system_prompt},

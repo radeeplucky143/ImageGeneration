@@ -1,104 +1,131 @@
-# Image Generation API
+# Image Generation Web Application
 
-A FastAPI-based service for generating and managing AI-generated images using Azure OpenAI.
+A modern web application for generating and managing images using AI technology. This application provides a user-friendly interface for creating, storing, and managing AI-generated images.
 
 ## Features
 
-- Generate multiple prompts for a given topic
-- Generate images from prompts
-- Approve/reject generated images
-- Automatic organization of images into approved/rejected folders
+- **AI Image Generation**: Create unique images using AI technology
+- **Image Storage**: Save and manage generated images
+- **User Authentication**: Secure login and registration system
+- **Modern UI**: Clean and intuitive user interface
+- **Responsive Design**: Works on desktop and mobile devices
 
-## Setup
+## Tech Stack
 
-1. Create a virtual environment:
+- **Frontend**: HTML, CSS, JavaScript
+- **Backend**: Python (Flask)
+- **Database**: SQLite
+- **Authentication**: Flask-Login
+- **AI Integration**: OpenAI API
+- **Deployment**: Vercel
+
+## Prerequisites
+
+- Python 3.8 or higher
+- pip (Python package manager)
+- Git
+- Vercel account (for deployment)
+
+## Installation
+
+1. Clone the repository:
 ```bash
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+git clone https://github.com/radeeplucky143/ImageGeneration.git
+cd ImageGeneration
 ```
 
-2. Install dependencies:
+2. Create and activate a virtual environment:
+```bash
+python -m venv .venv
+.venv\Scripts\activate  # On Windows
+source .venv/bin/activate  # On Unix/MacOS
+```
+
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Set up environment variables in a `.env` file:
+4. Set up environment variables:
+Create a `.env` file in the root directory with the following variables:
 ```
-AZURE_OPENAI_API_KEY=your_api_key
-AZURE_OPENAI_API_VERSION=your_api_version
-AZURE_OPENAI_GPT4_DEPLOYMENT=your_gpt4_deployment
-AZURE_OPENAI_ENDPOINT=your_endpoint
-AZURE_OPENAI_DALLE_DEPLOYMENT=your_dalle_deployment
+OPENAI_API_KEY=your_api_key_here
+SECRET_KEY=your_secret_key_here
 ```
 
-## Running the API
+## Local Development
 
-Start the FastAPI server:
+1. Start the development server:
 ```bash
 python app.py
 ```
 
-The API will be available at `http://localhost:8000`. Access the API documentation at `http://localhost:8000/docs`.
+2. Open your web browser and navigate to `http://localhost:5000`
 
-## API Endpoints
+3. Register a new account or log in with existing credentials
 
-### Generate Prompts
-- **POST** `/generate-prompts`
-- Generates multiple prompts for a given topic
-- Request body: `{"topic": "your topic", "num_prompts": 10}`
+4. Start generating and managing your images!
 
-### Generate Image
-- **POST** `/generate-image`
-- Generates an image from a prompt
-- Request body: `{"prompt_id": "1", "prompt": "your prompt text"}`
+## Deployment to Vercel
 
-### Approve Image
-- **POST** `/approve-image`
-- Approves or rejects a generated image
-- Request body: `{"prompt_id": "1", "approved": true}`
+1. Create a Vercel account at [vercel.com](https://vercel.com) if you don't have one
+
+2. Install Vercel CLI (optional, but recommended):
+```bash
+npm install -g vercel
+```
+
+3. Deploy using Vercel CLI:
+```bash
+vercel
+```
+
+4. Or deploy directly through Vercel Dashboard:
+   - Go to [vercel.com/dashboard](https://vercel.com/dashboard)
+   - Click "New Project"
+   - Import your GitHub repository
+   - Configure environment variables:
+     - `OPENAI_API_KEY`
+     - `SECRET_KEY`
+   - Click "Deploy"
+
+5. After deployment, Vercel will provide you with a URL where your application is hosted
 
 ## Project Structure
 
 ```
-.
-├── app.py                 # FastAPI application
-├── requirements.txt       # Project dependencies
-└── src/
-    ├── config/           # Configuration files
-    ├── images/           # Generated images
-    │   ├── ingest/      # Newly generated images
-    │   ├── process/     # Images being processed
-    │   └── approved/    # Approved images
-    ├── prompts/         # Generated prompts
-    ├── utils/           # Utility modules
-    │   ├── agent.py     # Azure OpenAI integration
-    │   ├── logger.py    # Logging functionality
-    │   └── path_manager.py  # File path management
-    └── logs/            # Application logs
+ImageGeneration/
+├── static/
+│   ├── css/
+│   ├── js/
+│   └── images/
+├── templates/
+│   ├── auth/
+│   ├── main/
+│   └── base.html
+├── .env
+├── app.py
+├── config.py
+├── models.py
+├── requirements.txt
+├── vercel.json
+└── README.md
 ```
 
-## Configuration
+## Contributing
 
-The project can be configured through environment variables or by modifying the constants in `src/config/constants.py`:
-
-- `IMAGE_SIZE`: Size of generated images
-- `IMAGE_QUALITY`: Image quality setting
-- `IMAGE_STYLE`: Image style setting
-
-## Error Handling
-
-The project includes comprehensive error handling for:
-- API connection issues
-- Image generation failures
-- File system operations
-- Invalid user input
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgments
+## Contact
 
-- Azure OpenAI Service
-- DALL-E 3 for image generation
-- Semantic Kernel for AI integration 
+Radeep Lucky - [GitHub](https://github.com/radeeplucky143)
+
+Project Link: [https://github.com/radeeplucky143/ImageGeneration](https://github.com/radeeplucky143/ImageGeneration) 
