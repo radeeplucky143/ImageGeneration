@@ -1,6 +1,8 @@
 import asyncio
+
 from src.utils.agent import AzureOpenAIChat
 from src.utils.logger import logger
+
 
 async def test_image_generation():
     """Test image generation with a sample prompt"""
