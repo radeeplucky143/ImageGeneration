@@ -173,3 +173,6 @@ src/logs/*
 .vercel_build_output/
 .vercel_deployments/
 .vercel_cache/
+
+# Ignore generated images
+src/images/ingest/
