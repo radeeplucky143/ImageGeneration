@@ -1,20 +1,20 @@
-import os
-from typing import List, Optional, Union
-from pathlib import Path
 import asyncio
+import os
 from datetime import datetime
+from pathlib import Path
+from typing import List, Optional, Union
+
 import aiohttp
+from openai import AzureOpenAI
 from PIL import Image
 from semantic_kernel import Kernel
 from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion, AzureTextEmbedding
 from semantic_kernel.memory import VolatileMemoryStore
-from openai import AzureOpenAI  # Use new OpenAI client
-# from openai import AzureOpenAI, AsyncAzureOpenAI  # REMOVE THIS
-# from openai.types import ImagesResponse  # REMOVE THIS
 
 from src.config.constants import AzureConfig, ImageConfig
 from src.utils.logger import logger
 from src.utils.path_manager import PathManager
+
 
 class AzureOpenAIChat:
     """Azure OpenAI Chat agent for generating images and prompts."""
@@ -32,7 +32,7 @@ class AzureOpenAIChat:
         self.api_key = AzureConfig.API_KEY
         self.endpoint = AzureConfig.ENDPOINT
         self.deployment = AzureConfig.GTP4_DEPLOYMENT
-        self.api_version = "2023-12-01-preview"  # Use latest API version for DALL-E 3
+        self.api_version = "2024-02-15-preview"  # Updated API version for DALL-E 3
         self.embedding_deployment = AzureConfig.EMBEDDING_DEPLOYMENT
         self.dall_e_deployment = AzureConfig.DALL_E_DEPLOYMENT
         
@@ -49,7 +49,8 @@ class AzureOpenAIChat:
         return AzureOpenAI(
             api_key=self.api_key,
             api_version=self.api_version,
-            azure_endpoint=self.endpoint
+            azure_endpoint=self.endpoint,
+            timeout=self.timeout
         )
 
     def _validate_config(self) -> None:
@@ -210,7 +211,7 @@ class AzureOpenAIChat:
             
             for attempt in range(self.max_retries):
                 try:
-                    response = openai.ChatCompletion.create(
+                    response = self.client.chat.completions.create(
                         model=self.deployment,
                         messages=[
                             {"role": "system", "content": system_prompt},
