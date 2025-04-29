@@ -1,0 +1,39 @@
+# Core dependencies
+Flask==3.0.0
+Flask-Login==0.6.3
+Werkzeug==3.0.1
+python-dotenv==1.0.0
+requests==2.31.0
+Pillow==10.2.0
+python-multipart==0.0.9
+gunicorn==21.2.0
+
+# OpenAI integration
+openai==0.28.1
+
+# Async support
+aiohttp==3.9.3
+
+# Development dependencies (optional, can be removed for production)
+pytest==8.0.0
+black==24.1.1
+flake8==7.0.0
+mypy==1.8.0
+isort==5.13.2
+
+# Type hints
+types-requests==2.31.0.1
+types-Pillow==10.0.0.0
+
+# Logging
+python-json-logger==2.0.7
+
+# FastAPI dependencies
+fastapi==0.110.0
+uvicorn==0.29.0
+python-dotenv==1.0.0
+requests==2.31.0
+Pillow==10.2.0
+openai==0.28.1
+semantic-kernel==0.3.13.dev0
+# Add any other FastAPI dependencies you use 
